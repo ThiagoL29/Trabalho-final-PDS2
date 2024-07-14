@@ -11,13 +11,13 @@ private:
 public:
     AbstractGames(int rows, int cols) : board(rows, std::vector<int>(cols, 0)) {}              //Construtor
     
-    void printBoard();                                   //Métodos Iniciais
-    void readMove();
-    bool isValid();
-    bool checkWin();
+    virtual void printBoard() const;                                   //Métodos Iniciais
+    virtual void readMove();
+    virtual bool isValid(int row, int col) const;
+    virtual bool checkWin() const;
+    virtual void resetBoard();
 
-
-    ~AbstractGames (){}    
+    virtual ~AbstractGames (){}              //Destrutor
 };
 
 
