@@ -1,42 +1,70 @@
 #include "Player.h"
-
+#include "Utilities.h"
 #include <iostream>
 
-Player::Player(std::string name, std::string nickname): name(name), nickame(nickname) {
-    numOfVictoriesLig4 = numOfLossesLig4 = numOfVictoriesReversi = numOfLossesReversi = 0;
-    isDeleted = false;
+Player::Player()
+    : name(""), nickame("") {
+  numOfVictoriesLig4 = numOfLossesLig4 = numOfVictoriesReversi =
+      numOfLossesReversi = 0;
 }
 
-std::string Player::getName() const {
-    return this->name;
+Player::Player(std::string name, std::string nickname)
+    : name(toLower(name)), nickame(toLower(nickname)) {
+  numOfVictoriesLig4 = numOfLossesLig4 = numOfVictoriesReversi =
+      numOfLossesReversi = 0;
 }
 
-std::string Player::getNickname() const {
-    return this->nickame;
-}
+Player::Player(std::string name, std::string nickname, int numOfVictoriesLig4,
+               int numOfLossesLig4, int numOfVictoriesReversi,
+               int numOfLossesReversi)
+    : name(toLower(name)), nickame(toLower(nickname)),
+      numOfVictoriesLig4(numOfVictoriesLig4), numOfLossesLig4(numOfLossesLig4),
+      numOfVictoriesReversi(numOfVictoriesReversi),
+      numOfLossesReversi(numOfLossesReversi) {}
 
-bool Player::getUserStatus() const {
-    return this->isDeleted;
-}
+std::string Player::getName() const { return this->name; }
 
-void Player::removePlayer() {
-    this->isDeleted = true;
-}
+std::string Player::getNickname() const { return this->nickame; }
 
-void Player::updateName(std::string newName) {
-    this->name = newName;
+int Player::getNumOfVictoriesLig4() const { return this->numOfVictoriesLig4; }
+int Player::getNumOfLossesLig4() const { return this->numOfLossesLig4; }
+int Player::getNumOfVictoriesReversi() const {
+  return this->numOfVictoriesReversi;
 }
+int Player::getNumOfLossesReversi() const { return this->numOfLossesReversi; }
+
+void Player::updateName(std::string newName) { this->name = newName; }
 
 void Player::updateNickName(std::string newNickname) {
-    this->nickame = newNickname;
+  this->nickame = newNickname;
 }
 
-void Player::updateLig4PlayerStats(int numOfVictoriesLig4, int numOfLossesLig4) {
-    this->numOfVictoriesLig4 = numOfVictoriesLig4;
-    this->numOfLossesLig4 = numOfLossesLig4;
+void Player::updateLig4PlayerStats(int numOfVictoriesLig4,
+                                   int numOfLossesLig4) {
+    if(numOfVictoriesLig4 < 0 || numOfLossesLig4 < 0) {
+        throw std::out_of_range("Número de vitórias e derrotas devem ser positivos.");
+    }
+  this->numOfVictoriesLig4 = numOfVictoriesLig4;
+  this->numOfLossesLig4 = numOfLossesLig4;
 }
 
-void Player::updateReversiPlayerStats(int numOfVictoriesReversi, int numOfLossesReversi) {
-    this->numOfVictoriesReversi = numOfVictoriesReversi;
-    this->numOfLossesReversi = numOfLossesReversi;
+void Player::updateReversiPlayerStats(int numOfVictoriesReversi,
+                                      int numOfLossesReversi) {
+
+    if(numOfVictoriesReversi < 0 || numOfLossesReversi < 0) {
+        throw std::out_of_range("Número de vitórias e derrotas devem ser positivos.");
+    }
+  this->numOfVictoriesReversi = numOfVictoriesReversi;
+  this->numOfLossesReversi = numOfLossesReversi;
+}
+
+std::ostream &operator<<(std::ostream &os, const Player &player) {
+
+  os << player.getName() << ";";
+  os << player.getNickname() << ";";
+  os << player.getNumOfVictoriesLig4() << ";";
+  os << player.getNumOfLossesLig4() << ";";
+  os << player.getNumOfVictoriesReversi() << ";";
+  os << player.getNumOfLossesReversi() << std::endl;
+  return os;
 }
