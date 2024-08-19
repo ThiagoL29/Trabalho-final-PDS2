@@ -32,6 +32,10 @@ void Board4::readMove(int player, int& lastMoveX, int& lastMoveY) {
                 number = 0;
             }
         }
+
+        boardInfo[(col-1)-number][choice-1] = player;
+        lastMoveY = (col-1)-number;
+        lastMoveX = choice-1;
 }
 
 bool Board4::checkWinner(int x, int y, int player) const {
