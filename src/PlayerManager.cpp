@@ -7,7 +7,7 @@
 #include <vector>
 #include <cctype>
 
-const std::string path("/home/busnu/PROJETO/Trabalho-final-PDS2/bin/players_information.txt");
+const std::string path("players_informations.txt");
 
 PlayerManager::PlayerManager() {}
 

@@ -4,9 +4,12 @@
 #include "../include/PlayerManager.h"
 #include "../include/Utilitiies.h"
 #include "../include/TicTacToe.hpp"
+#include "../include/TicTacBoard.hpp"
 #include "../include/Connect4.hpp"
+#include "../include/Connect4Board.hpp"
 #include <iostream>
 #include <sstream>
+#include <limits>
 enum GameType {REVERSI, CONNECT4, TICTAC, NONE};
 
 void printCommandList() {
@@ -30,7 +33,7 @@ void printCommandList() {
     std::cout << "4. Executar Partida" << std::endl;
     std::cout << "   Comando: EP <gameType> <nickname1> <nickname2>" << std::endl;
     std::cout << "   Descrição: Inicia uma partida do tipo especificado com os dois jogadores fornecidos." << std::endl;
-    std::cout << "   Tipo de Jogo: 'R' para Reversi, 'C' para Connect4 (a ser implementado)." << std::endl;
+    std::cout << "   Tipo de Jogo: 'R' para Reversi, 'C' para Connect4 e ''." << std::endl;
     std::cout << std::endl;
 
     std::cout << "5. Atualizar Jogador" << std::endl;
@@ -42,6 +45,11 @@ void printCommandList() {
     std::cout << "6. Finalizar Sistema" << std::endl;
     std::cout << "   Comando: FS" << std::endl;
     std::cout << "   Descrição: Finaliza o sistema." << std::endl;
+}
+
+void clearInputBuffer(){    //Limpa buffer
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 void printPlayerList(PlayerManager& pm, char sortBy) {
@@ -58,8 +66,8 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
     }
 
     if (gameType == REVERSI) {
-        std::cout << "BEM VINDOS AO REVERSI!!";
-        std::cout << "Digite o tamanho do tabuleiro que voces queirem jogar, lembrem que dever ser um numero par" << std::endl;
+        std::cout << "BEM VINDOS AO REVERSI!!" << std::endl;
+        std::cout << "Digite o tamanho do tabuleiro, lembrem que dever ser um numero par" << std::endl;
         int size = 0;
         std::cin >> size;
         if(size <= 0 || size %2 !=0){
@@ -90,7 +98,7 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
             std::cerr << e.what() << std::endl;
         }
     }else if(gameType == TICTAC){
-        std::cout << "BEM VINDOS AO TICTACTOE!!" << std::endl;
+        std::cout << "BEM VINDOS AO TICTACTOE!!";
         Board board; 
         TicTacToe game(board);
         game.Start(nickname1, nickname2);
@@ -183,6 +191,7 @@ int main() {
             }
 
             executeGame(pm, gameType, nickname1, nickname2);
+            clearInputBuffer();
         } else if(command == "FS") { // Finalizar Sistema
             break;
         }else if(command == "UP"){     //Update de jogadores

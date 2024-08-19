@@ -1,4 +1,8 @@
-#include "TicTacBoard.hpp"
+#include "../include/TicTacBoard.hpp"
+
+Board::Board(){}
+
+Board::~Board(){}
 
 void Board::startBoard() {
 

@@ -1,9 +1,9 @@
-#include "TicTacToe.hpp"
+#include "../include/TicTacToe.hpp"
 #include "../include/Player.h"
 #include "../include/PlayerManager.h"
 #include "../include/Utilitiies.h"  
 
-TicTacToe::TicTacToe(const Board& board) : board_(board) {}
+TicTacToe::TicTacToe(const Board& board) : board_(board){}
 
 TicTacToe::~TicTacToe() {
     delete activePlayers[0];
