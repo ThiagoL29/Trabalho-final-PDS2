@@ -1,7 +1,7 @@
 #ifndef TICTACTOE_H
 #define TICTACTOE_H
 
-#include "Tabuleiro.hpp"
+#include "TicTacBoard.hpp"
 
 class TicTacToe {
 public:

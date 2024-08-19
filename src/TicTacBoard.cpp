@@ -1,12 +1,12 @@
-#include "Tabuleiro.hpp"
+#include "TicTacBoard.hpp"
 
 
 void Board::startBoard() {
 
-    int posicao= 1;
+    int position= 1;
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            board_[i][j] = POSITIONS[posicao++];
+            board_[i][j] = POSITIONS[position++];
         }
     }
 }
@@ -51,13 +51,13 @@ bool Board::checkWin() {
     return board_[i][j] == board_[++i][--j] && board_[i][j] == board_[++i][--j];
 }
 
-bool Board::updatePosition(int posicao) {
-    bool atualizacao = false;
+bool Board::updatePosition(int position) {
+    bool update = false;
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            if (board_[i][j] == POSITIONS[posicao]) {
+            if (board_[i][j] == POSITIONS[position]) {
                 board_[i][j] = mark;
-                atualizacao = true;
+                update = true;
             }
         }
     }
@@ -67,5 +67,5 @@ bool Board::updatePosition(int posicao) {
         mark = 'X';    
     }
 
-    return atualizacao;
+    return update;
 }
