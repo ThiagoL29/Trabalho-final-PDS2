@@ -5,19 +5,21 @@
 #include <vector>
 
 class AbstractGames {
-private:
-    std::vector<std::vector<int>> board; // Representando o tabuleiro
+protected:
+   void printBasicBoard() const;
 
 public:
-    AbstractGames(int rows, int cols) : board(rows, std::vector<int>(cols, 0)) {}              //Construtor
+    std::vector<std::vector<int>> board; // Representando o tabuleiro
+    AbstractGames(int rows, int cols);          //Construtor
+
     
-    virtual void printBoard() const;                                   //Métodos Iniciais
-    virtual void readMove();
-    virtual bool isValid(int row, int col) const;
-    virtual bool checkWin() const;
+    virtual void printBoard() const = 0;                                   //Métodos Iniciais
+    virtual void readMove() = 0;
+    virtual bool isValid(int row, int col, int currentPlayer) = 0;
+    virtual bool checkWin() = 0;
     virtual void resetBoard();
 
-    virtual ~AbstractGames (){}              //Destrutor
+    virtual ~AbstractGames() = 0;           //Destrutor
 };
 
 

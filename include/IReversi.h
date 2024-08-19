@@ -1,22 +1,32 @@
 #ifndef REVERSI_H
 #define REVERSI_H
-
+#include "Player.h"
+#include "PlayerManager.h"
 #include "IGames.h"
+#include <vector>
 
 class Reversi : public AbstractGames{
-    public:
-        Reversi();
+public:
+    Reversi(int rows, int cols, const std::string& nickname1, const std::string& nickname2);
+    ~Reversi();
+    void printBoard() const;
+    void readMove() override;
+    bool isValid(int row, int col, int currentPlayer) override;     
+    bool checkWin() override;
+    void startGame();
+    bool possibleDirections(int row, int col, int x, int y, int currentPlayer);
+    bool validPosition(int row, int col);
+    void makeMove(int row, int col, int currentPlayer);
+    void switchPlayer();
 
-        void printBoard() const override;
-        void readMove() override;
-        bool isValid(int row, int col) const override;     // Conts pois nao modifica o Objeto
-        bool checkWin() const override;
-        void resetBoard() override;
+    enum Colors {NONE = 0, BLACK  = -1, WHITE = 1};
+    std::vector<std::vector<int>> board;
 
-    private:
-    bool checkDirection(int row, int col, int drow, int dcol, char player) const;
-    void makeMove(int row, int col, char player);
-    
+private:
+    int currentPlayer;
+    std::vector<Player> players;
+    Player* activePlayers[2];
+
 };
 
-#endif 
+#endif // REVERSI_H
