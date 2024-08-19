@@ -7,7 +7,6 @@
 #include <vector>
 #include <cctype>
 
-
 const std::string path("players_information.txt");
 
 PlayerManager::PlayerManager() {}
@@ -32,9 +31,26 @@ void PlayerManager::checkIfPlayerExistsInFile(Player &player,
   }
 }
 
+void PlayerManager::checkSizeOfPlayerDataVectorAndCreateAuxPlayer(
+    std::vector<std::string> &playerData, Player *&player) const {
+  try {
+    if (playerData.size() != 8) {
+      throw std::out_of_range("ERRO: O arquivo está com dados inválidos.");
+    }
+
+    player = new Player(playerData[0], playerData[1], std::stoi(playerData[2]),
+                        std::stoi(playerData[3]), std::stoi(playerData[4]),
+                        std::stoi(playerData[5]), std::stoi(playerData[6]),
+                        std::stoi(playerData[7]));
+
+  } catch (std::exception &e) {
+    std::cout << e.what() << std::endl;
+  }
+}
+
 void PlayerManager::readFileRowsAndCheckIfPlayerExists(
     Player &player, std::ifstream &file) const {
-  
+
   std::string line;
   while (getline(file, line)) {
     std::stringstream info(line);
@@ -44,22 +60,16 @@ void PlayerManager::readFileRowsAndCheckIfPlayerExists(
       playerData.push_back(aux);
     }
 
-    if (playerData.size() == 6) {
-        Player auxPlayer(playerData[0], playerData[1], std::stoi(playerData[2]),
-                         std::stoi(playerData[3]), std::stoi(playerData[4]),
-                         std::stoi(playerData[5]));
-      std::cout << auxPlayer.getName() << std::endl;
-      checkIfPlayerExistsInFile(player, auxPlayer);
-       
-    }
-    
+    Player *auxPlayer = nullptr;
+    checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
+    checkIfPlayerExistsInFile(player, *auxPlayer);
+    delete auxPlayer;
   }
   file.close();
 }
 
 void PlayerManager::addPlayerToFile(Player &player, std::ofstream &file) {
   file << player;
-  file.close();
 }
 
 void PlayerManager::addPlayer(Player &player) {
@@ -67,7 +77,6 @@ void PlayerManager::addPlayer(Player &player) {
     std::ifstream in(path, std::fstream::in);
     checkIfInputFileExists(in);
     readFileRowsAndCheckIfPlayerExists(player, in);
-    in.close();
 
     std::ofstream out(path, std::ios_base::app);
     checkIfOutputFileExists(out);
@@ -82,8 +91,10 @@ void PlayerManager::addPlayer(Player &player) {
 }
 
 void PlayerManager::readFileRowsAndRemovePlayer(std::vector<Player> &players,
-                                                 std::ifstream &file, std::string nickname) {
+                                                std::ifstream &file,
+                                                std::string nickname) {
   std::string line;
+  bool playerFound = false;
   while (getline(file, line)) {
     std::vector<std::string> playerData;
     std::stringstream info(line);
@@ -92,43 +103,66 @@ void PlayerManager::readFileRowsAndRemovePlayer(std::vector<Player> &players,
       playerData.push_back(aux);
     }
 
-    if (playerData.size() == 6) {
-    Player auxPlayer(playerData[0], playerData[1], std::stoi(playerData[2]),
-                     std::stoi(playerData[3]), std::stoi(playerData[4]),
-                     std::stoi(playerData[5]));
+    Player *auxPlayer = nullptr;
+    checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
 
-    if (auxPlayer.getNickname() != nickname) {
-      players.push_back(auxPlayer);
+    if (auxPlayer->getNickname() == nickname) {
+      playerFound = true;
+    } else {
+      players.push_back(*auxPlayer);
     }
-    }
-    file.close();
+
+    delete auxPlayer;
   }
-                                                 }
+
+  file.close();
+
+  if (!playerFound) {
+    throw std::invalid_argument("Jogador já está excluído.");
+  }
+}
 
 void PlayerManager::removePlayer(std::string nickname) {
   try {
-  std::ifstream in(path, std::fstream::in);
-  checkIfInputFileExists(in);
-    
-  std::vector<Player> *players = new std::vector<Player>;
-  readFileRowsAndRemovePlayer(*players, in, nickname);
+    std::ifstream in(path, std::fstream::in);
+    checkIfInputFileExists(in);
 
-  std::ofstream out(path, std::fstream::out);
-  for (auto iter = players->begin(); iter != players->end(); iter++) {
-    addPlayerToFile(*iter, out);
-  }
+    std::vector<Player> *players = new std::vector<Player>;
+    readFileRowsAndRemovePlayer(*players, in, nickname);
 
-  delete players;
-    } catch (std::ios_base::failure &e) {
-      std::cout << e.what() << std::endl;
-    } catch (const std::exception &e) {
-      std::cout << e.what() << std::endl;
+    std::ofstream out(path, std::fstream::out);
+    for (auto iter = players->begin(); iter != players->end(); iter++) {
+      addPlayerToFile(*iter, out);
     }
+
+    out.close();
+
+    delete players;
+  } catch (std::ios_base::failure &e) {
+    std::cout << e.what() << std::endl;
+  } catch (const std::exception &e) {
+    std::cout << e.what() << std::endl;
+  }
 }
 
-void PlayerManager::readFileRowsAndUpdatePlayer(std::vector<Player> &players, Player &player,
-                                                 std::ifstream &file) {
+void PlayerManager::checkNewNickname(Player *auxPlayer, Player &player,
+                                     std::string nickname) const {
+
+  if (auxPlayer->getNickname() == player.getNickname() &&
+      nickname != player.getNickname()) {
+    delete auxPlayer;
+    throw std::invalid_argument(
+        "Jogador já existe. Tente novamente com outro nickname.");
+  }
+}
+
+void PlayerManager::readFileRowsAndUpdatePlayer(std::vector<Player> &players,
+                                                std::string nickname,
+                                                Player &player,
+                                                std::ifstream &file) {
   std::string line;
+  bool playerFound = false;
+
   while (getline(file, line)) {
     std::vector<std::string> playerData;
     std::stringstream info(line);
@@ -138,41 +172,42 @@ void PlayerManager::readFileRowsAndUpdatePlayer(std::vector<Player> &players, Pl
       playerData.push_back(aux);
     }
 
-    if (playerData.size() == 6) {
-    Player auxPlayer(playerData[0], playerData[1], std::stoi(playerData[2]),
-                     std::stoi(playerData[3]), std::stoi(playerData[4]),
-                     std::stoi(playerData[5]));
+    Player *auxPlayer = nullptr;
+    checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
+    checkNewNickname(auxPlayer, player, nickname);
 
-    if (auxPlayer.getNickname() != player.getNickname()) {
-      players.push_back(auxPlayer);
-      continue;
+    if (auxPlayer->getNickname() == nickname) {
+      *auxPlayer = player;
+      playerFound = true;
     }
 
-    auxPlayer = player;
-    cmpPlayer = auxPlayer;
-    players.push_back(auxPlayer);
-    }
-
-    if(cmpPlayer.getNickname() != player.getNickname()) {
-      throw std::invalid_argument("Jogador não existe. Tente novamente com outro nickname.");
-    }
+    players.push_back(*auxPlayer);
+    delete auxPlayer;
   }
+
   file.close();
+
+  if (!playerFound) {
+    throw std::invalid_argument(
+        "Jogador não existe. Tente novamente com outro nickname.");
+  }
 }
 
-void PlayerManager::updatePlayer(Player &player) {
+void PlayerManager::updatePlayer(std::string nickname, Player &player) {
   try {
     std::ifstream in(path, std::fstream::in);
     checkIfInputFileExists(in);
 
     std::vector<Player> *players = new std::vector<Player>;
-    readFileRowsAndUpdatePlayer(*players, player, in);
+    readFileRowsAndUpdatePlayer(*players, nickname, player, in);
 
     std::ofstream out(path, std::fstream::out);
     for (auto iter = players->begin(); iter != players->end(); iter++) {
       addPlayerToFile(*iter, out);
     }
-    
+
+    out.close();
+
     delete players;
   } catch (std::ios_base::failure &e) {
     std::cout << e.what() << std::endl;
@@ -194,19 +229,18 @@ Player PlayerManager::returnPlayerByNickname(std::string nickname) {
         playerData.push_back(aux);
       }
 
-      if (playerData.size() == 6) {
-          Player auxPlayer(playerData[0], playerData[1], std::stoi(playerData[2]),
-                           std::stoi(playerData[3]), std::stoi(playerData[4]),
-                           std::stoi(playerData[5]));
+      Player *auxPlayer = nullptr;
+      checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
 
-        if(auxPlayer.getNickname() == nickname) {
-          return auxPlayer;
-        }
+      if (auxPlayer->getNickname() == nickname) {
+        return *auxPlayer;
       }
 
+      delete auxPlayer;
     }
-      in.close();
-    
+
+    in.close();
+
   } catch (std::ios_base::failure &e) {
     std::cout << e.what() << std::endl;
   } catch (const std::exception &e) {
@@ -216,9 +250,10 @@ Player PlayerManager::returnPlayerByNickname(std::string nickname) {
   return Player();
 }
 
-void PlayerManager::readFileRows(std::vector<Player> &players, std::ifstream &file) {
+void PlayerManager::readFileRows(std::vector<Player> &players,
+                                 std::ifstream &file) {
   std::string line;
-  
+
   while (getline(file, line)) {
     std::vector<std::string> playerData;
     std::stringstream info(line);
@@ -227,14 +262,10 @@ void PlayerManager::readFileRows(std::vector<Player> &players, std::ifstream &fi
       playerData.push_back(aux);
     }
 
-    if (playerData.size() == 6) {
-    Player auxPlayer(playerData[0], playerData[1], std::stoi(playerData[2]),
-                     std::stoi(playerData[3]), std::stoi(playerData[4]),
-                     std::stoi(playerData[5]));
-
-      players.push_back(auxPlayer);
-    }
-    
+    Player *auxPlayer = nullptr;
+    checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
+    players.push_back(*auxPlayer);
+    delete auxPlayer;
   }
   file.close();
 }
@@ -249,30 +280,32 @@ void PlayerManager::printPlayers(char orderBy) {
 
     char lowerOrderBy = std::tolower(orderBy);
 
-    if(lowerOrderBy != 'n' && lowerOrderBy != 'a') {
+    if (lowerOrderBy != 'n' && lowerOrderBy != 'a') {
       throw std::invalid_argument("Ordenação inválida. Tente novamente.");
     }
 
     if (lowerOrderBy == 'n') {
-      std::sort(players->begin(), players->end(), [](const Player& lhs, const Player& rhs) {
-            return lhs.getName() < rhs.getName();
-         });
+      std::sort(players->begin(), players->end(),
+                [](const Player &lhs, const Player &rhs) {
+                  return lhs.getName() < rhs.getName();
+                });
     }
 
-    if(lowerOrderBy == 'a') {
-      std::sort(players->begin(), players->end(), [](const Player& lhs, const Player& rhs) {
-          return lhs.getNickname() < rhs.getNickname();
-       });
+    if (lowerOrderBy == 'a') {
+      std::sort(players->begin(), players->end(),
+                [](const Player &lhs, const Player &rhs) {
+                  return lhs.getNickname() < rhs.getNickname();
+                });
     }
 
-    for(auto it = players->begin(); it != players->end(); it++) {
-        std::cout << *it << std::endl;
-     }
-    
+    for (auto it = players->begin(); it != players->end(); it++) {
+      it->print();
+    }
+
     delete players;
   } catch (std::ios_base::failure &e) {
-      std::cout << e.what() << std::endl;
+    std::cout << e.what() << std::endl;
   } catch (const std::exception &e) {
-      std::cout << e.what() << std::endl;
+    std::cout << e.what() << std::endl;
   }
 }
