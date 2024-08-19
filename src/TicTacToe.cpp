@@ -1,7 +1,7 @@
 #include "TicTacToe.hpp"
 #include "../include/Player.h"
 #include "../include/PlayerManager.h"
-#include "../include/Utilitiies.h"
+#include "../include/Utilitiies.h"  
 
 TicTacToe::TicTacToe(const Board& board) : board_(board) {}
 
