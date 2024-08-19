@@ -2,6 +2,11 @@
 
 TicTacToe::TicTacToe(const Board& board) : board_(board) {}
 
+TicTacToe::~TicTacToe() {
+    delete activePlayers[0];
+    delete activePlayers[1];
+}
+
 void TicTacToe::Start(const string& nickname1, const string& nickname2) {
     board_.startBoard();
 

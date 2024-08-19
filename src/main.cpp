@@ -4,9 +4,7 @@
 #include "../include/PlayerManager.h"
 #include "../include/Utilitiies.h"
 #include "../include/TicTacToe.hpp"
-#include "../include/TicTacBoard.hpp"
 #include "../include/Connect4.hpp"
-#include "../include/Connect4Board.hpp"
 #include <iostream>
 #include <sstream>
 enum GameType {REVERSI, CONNECT4, TICTAC, NONE};
@@ -76,7 +74,7 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
     }
     else if(gameType == CONNECT4){
         std::cout << "BEM VINDOS AO CONNECT 4!!" << std::endl;
-         std::cout << "Digite o tamanho do tabuleiro que voces queirem jogar, lembrem que deve ser um numero maior ou igual a 4" << std::endl;
+        std::cout << "Digite o tamanho do tabuleiro que voces queirem jogar, lembrem que deve ser um numero maior ou igual a 4" << std::endl;
         int col = 0;
         int row = 0;
         std::cin >> col;
