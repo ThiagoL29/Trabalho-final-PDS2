@@ -15,7 +15,7 @@ public:
     bool checkWin() override;
     void startGame();
     bool possibleDirections(int row, int col, int x, int y, int currentPlayer);
-    bool validPosition(int row, int col);
+    bool validPosition(size_t row, size_t col);
     void makeMove(int row, int col, int currentPlayer);
     void switchPlayer();
 

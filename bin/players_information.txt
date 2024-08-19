@@ -1,1 +1,3 @@
-joana;jpk;0;0;0;0
+maligno;jkp;0;0;0;3;0;0
+andre;al;0;0;3;0;0;0
+monica;mon;0;0;0;0;0;0

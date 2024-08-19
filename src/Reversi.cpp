@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-Reversi::Reversi(int rows, int cols, const std::string& nickname1, const std::string& nickname2)
+Reversi::Reversi(int rows, int cols, const std::string& nickname1, const std::string& nickname2)     ///Construtor que já inicia o jogo com os seus respectivos participantes iniciados.
     : AbstractGames(rows, cols), currentPlayer(BLACK), board(rows, std::vector<int>(cols, 0)) {
 
     PlayerManager pm; 
@@ -28,10 +28,10 @@ Reversi::~Reversi(){
 }
 
 void Reversi::switchPlayer() {
-    currentPlayer = (currentPlayer == BLACK) ? WHITE : BLACK;
+    currentPlayer = (currentPlayer == BLACK) ? WHITE : BLACK;                //// Variavel crucial, indicativa do dono da jogada
 }
 
-void Reversi::printBoard() const {
+void Reversi::printBoard() const {        //// Imprime o tabuleiro no formato do reversi
     int index = 1;
     std::cout << "Tabuleiro atual:" << std::endl;
     for(size_t i = 0; i <= board.size(); i++)
@@ -57,7 +57,7 @@ void Reversi::printBoard() const {
     }
 }
 
-void Reversi::startGame() {
+void Reversi::startGame() {              /// Começa o jogo,resetando o tabuleiro e setando as peças iniciais no local de origem
     resetBoard(); // Limpa o tabuleiro 
     currentPlayer = BLACK;
 
@@ -69,8 +69,8 @@ void Reversi::startGame() {
     
 }
 
-bool Reversi::possibleDirections(int row, int col, int x, int y, int player) {
-    int rowDirection = row + x;
+bool Reversi::possibleDirections(int row, int col, int x, int y, int player) {         ///Olha as direçoes possiveis se baseando em um sistema de cordenadas x ou y sendo a casa da jogada
+    int rowDirection = row + x;                                                        //o valor (0, 0)
     int colDirection = col + y;
     bool foundEnemy = false;
 
@@ -89,11 +89,11 @@ bool Reversi::possibleDirections(int row, int col, int x, int y, int player) {
     return false;
 }
 
-bool Reversi::validPosition(int row, int col) {
+bool Reversi::validPosition(size_t row, size_t col) {         
     return row >= 0 && row < board.size() && col >= 0 && col < board.size();
 }
 
-bool Reversi::isValid(int row, int col, int currentPlayer){
+bool Reversi::isValid(int row, int col, int currentPlayer){   ///Vê se a jogada é valida
     if (board[row][col] != 0)
         return false;
 
@@ -110,12 +110,17 @@ bool Reversi::isValid(int row, int col, int currentPlayer){
     }
     return hasValidMove;
 }
-void Reversi::readMove() {
+void Reversi::readMove() {     ///Lê a jogada, imprime o tabuleiro e o jogador atual
     int row, col;
     bool moveValid = false;
+    Player* currentPlayerPtr = (currentPlayer == BLACK) ? activePlayers[0] : activePlayers[1];
 
     while (!moveValid) {
         try {
+            std::cout << "Vez de " << currentPlayerPtr->getNickname() << " ("  
+                    << ((currentPlayer == BLACK) ? "Preto" : "Branco")
+                    << "):" << std::endl;
+            printBoard();
             std::cout << "Digite seu movimento (linha e coluna): " << std::endl;
             std::cin >> row >> col;
 
@@ -139,7 +144,7 @@ void Reversi::readMove() {
     }
 }
 
-void Reversi::makeMove(int row, int col, int currentPlayer) {
+void Reversi::makeMove(int row, int col, int currentPlayer) {  ///Faz a jogadae vira as peças
     board[row][col] = currentPlayer;
 
     for (int x = -1; x <= 1; ++x) {
@@ -172,7 +177,7 @@ bool Reversi::checkWin() {
                 whiteHasMove = true;
         }
     }
-    if (!blackHasMove && currentPlayer == BLACK && whiteHasMove){
+    if (!blackHasMove && currentPlayer == BLACK && whiteHasMove){   
         switchPlayer();
         return false;
     }
@@ -208,8 +213,8 @@ bool Reversi::checkWin() {
         winner.updateReversiPlayerStats(winner.getNumOfVictoriesReversi() + 1, winner.getNumOfLossesReversi());
         loser.updateReversiPlayerStats(loser.getNumOfVictoriesReversi(), loser.getNumOfLossesReversi() + 1 );
         PlayerManager pm;
-        pm.updatePlayer(winner);
-        pm.updatePlayer(loser);
+        pm.updatePlayer(winner.getNickname() , winner);
+        pm.updatePlayer(loser.getNickname(), loser);
         return true; // END GAME
     }
 
@@ -217,7 +222,7 @@ bool Reversi::checkWin() {
 }
 
 
-
+/// int main com chechwin de condiçao e rodando read move
 
 
 
