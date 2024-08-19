@@ -2,7 +2,7 @@
 
 TicTacToe::TicTacToe(const Board& board) : board_(board) {}
 
-void TicTacToe::Start() {
+void TicTacToe::Start(const string& nickname1, const string& nickname2) {
     board_.startBoard();
 
     int moves = 0;
