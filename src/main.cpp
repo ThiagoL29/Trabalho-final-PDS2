@@ -3,9 +3,13 @@
 #include "../include/Player.h"
 #include "../include/PlayerManager.h"
 #include "../include/Utilitiies.h"
+#include "TicTacBoard.hpp"
+#include "TicTacToe.hpp"
+#include "Connect4Board.hpp"
+#include "Connect4.hpp"
 #include <iostream>
 #include <sstream>
-enum GameType {REVERSI, LIG4, NONE};
+enum GameType {REVERSI, LIG4, TICTACTOE};
 
 void printPlayerList(PlayerManager& pm, char sortBy) {
     pm.printPlayers(sortBy);
@@ -34,6 +38,20 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
             game.readMove();
         }
     }
+
+    if (gameType == LIG4) {
+        cout << "Digite o tamanho de linhas e colunas que você deseja no tabuleiro, respectivamente: " << endl;
+        int row, col;
+        cin >> row >> col;
+        Ligue4 lig4(row, col);
+    }
+
+    if (gameType == TICTACTOE) {
+        Board board;
+        TicTacToe game(board);
+        game.Start();
+    }
+
 }
 
 
@@ -110,7 +128,9 @@ int main() {
                 gameType = REVERSI;
             } else if (gameTypeChar == 'L') {
                 gameType = LIG4;
-            } else {
+            } else if (gameTypeChar == 'T') {
+                gameType = TICTACTOE;
+            }else{
                 std::cout << "ERRO: dados incorretos" << std::endl;
                 continue;
             }
