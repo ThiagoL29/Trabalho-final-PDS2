@@ -1,9 +1,9 @@
 # Compiler
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -I/home/busnu/PROJETO/Trabalho-final-PDS2/include
+CXXFLAGS = -std=c++11 -Wall -Iinclude
 
 # Directories
-SRC_DIR = /home/busnu/PROJETO/Trabalho-final-PDS2/src
+SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 

@@ -1,7 +1,7 @@
-#include "../include/IReversi.h"
-#include "../include/Player.h"
-#include "../include/PlayerManager.h"
-#include "../include/Utilitiies.h"
+#include "IReversi.h"
+#include "Player.h"
+#include "PlayerManager.h"
+#include "Utilitiies.h"
 #include <iostream>
 
 

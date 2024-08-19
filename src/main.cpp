@@ -1,15 +1,16 @@
-#include "../include/IGames.h"
-#include "../include/IReversi.h"
-#include "../include/Player.h"
-#include "../include/PlayerManager.h"
-#include "../include/Utilitiies.h"
-#include "../include/TicTacToe.hpp"
-#include "../include/TicTacBoard.hpp"
-#include "../include/Connect4.hpp"
-#include "../include/Connect4Board.hpp"
+#include "IGames.h"
+#include "IReversi.h"
+#include "Player.h"
+#include "PlayerManager.h"
+#include "Utilitiies.h"
+#include "TicTacToe.hpp"
+#include "TicTacBoard.hpp"
+#include "Connect4.hpp"
+#include "Connect4Board.hpp"
 #include <iostream>
 #include <sstream>
 #include <limits>
+
 enum GameType {REVERSI, CONNECT4, TICTAC, NONE};
 
 void printCommandList() {
@@ -105,9 +106,6 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
     }
     
 }
-
-
-
 
 int main() {
     std::cout << "BEM VINDO AO HUB DE JOGOS DE TABULEIRO!!!!" << std::endl; 

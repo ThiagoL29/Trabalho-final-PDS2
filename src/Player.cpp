@@ -1,5 +1,5 @@
-#include "../include/Player.h"
-#include "../include/Utilitiies.h"
+#include "Player.h"
+#include "Utilitiies.h"
 #include <iostream>
 
 Player::Player() : name(""), nickame("") {

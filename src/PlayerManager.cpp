@@ -1,5 +1,5 @@
-#include "../include/PlayerManager.h"
-#include "../include/Utilitiies.h"
+#include "PlayerManager.h"
+#include "Utilitiies.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -7,7 +7,7 @@
 #include <vector>
 #include <cctype>
 
-const std::string path("players_informations.txt");
+const std::string path("./database/players_informations.txt");
 
 PlayerManager::PlayerManager() {}
 
