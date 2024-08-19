@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-Reversi::Reversi(int rows, int cols, const std::string& nickname1, const std::string& nickname2)     ///Construtor que já inicia o jogo com os seus respectivos participantes iniciados.
+Reversi::Reversi(int rows, int cols, const std::string& nickname1, const std::string& nickname2)     ///Construtor que já inicia o jogo com os seus respectivos participantes.
     : AbstractGames(rows, cols), currentPlayer(BLACK), board(rows, std::vector<int>(cols, 0)) {
 
     PlayerManager pm; 
@@ -17,7 +17,6 @@ Reversi::Reversi(int rows, int cols, const std::string& nickname1, const std::st
         throw std::invalid_argument("ERRO: Um ou ambos os jogadores não foram encontrados.");
     }
 
-    // Inicializa os ponteiros para os jogadores ativos
     activePlayers[0] = new Player(player1);
     activePlayers[1] = new Player(player2);
 }
@@ -144,7 +143,7 @@ void Reversi::readMove() {     ///Lê a jogada, imprime o tabuleiro e o jogador 
     }
 }
 
-void Reversi::makeMove(int row, int col, int currentPlayer) {  ///Faz a jogadae vira as peças
+void Reversi::makeMove(int row, int col, int currentPlayer) {  ///Faz a jogada e vira as peças
     board[row][col] = currentPlayer;
 
     for (int x = -1; x <= 1; ++x) {
@@ -222,7 +221,7 @@ bool Reversi::checkWin() {
 }
 
 
-/// int main com chechwin de condiçao e rodando read move
+/// int main com startgame + checkhwin de condiçao e rodando read move
 
 
 

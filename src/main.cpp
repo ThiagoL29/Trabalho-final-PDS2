@@ -3,6 +3,10 @@
 #include "../include/Player.h"
 #include "../include/PlayerManager.h"
 #include "../include/Utilitiies.h"
+#include "../include/TicTacToe.hpp"
+#include "../include/TicTacBoard.hpp"
+#include "../include/Connect4.hpp"
+#include "../include/Connect4Board.hpp"
 #include <iostream>
 #include <sstream>
 enum GameType {REVERSI, CONNECT4, TICTAC, NONE};
@@ -56,7 +60,8 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
     }
 
     if (gameType == REVERSI) {
-        
+        std::cout << "BEM VINDOS AO REVERSI!!";
+        std::cout << "Digite o tamanho do tabuleiro que voces queirem jogar, lembrem que dever ser um numero par" << std::endl;
         int size = 0;
         std::cin >> size;
         if(size <= 0 || size %2 !=0){
@@ -70,8 +75,29 @@ void executeGame(PlayerManager& pm, GameType gameType, const std::string& nickna
         }
     }
     else if(gameType == CONNECT4){
-
+        std::cout << "BEM VINDOS AO CONNECT 4!!" << std::endl;
+         std::cout << "Digite o tamanho do tabuleiro que voces queirem jogar, lembrem que deve ser um numero maior ou igual a 4" << std::endl;
+        int col = 0;
+        int row = 0;
+        std::cin >> col;
+        std::cin >> row;
+        if(col < 4 && row < 4 ){
+            std::cout << "Erro : Tabuleiro deve ter tamanho maior ou igual a 4" << std::endl;
+            std::cin >> col;
+            std::cin >>row;
+        }
+        try{
+            Ligue4 game(col, row, nickname1, nickname2);
+        }catch(const std::exception& e){
+            std::cerr << e.what() << std::endl;
+        }
+    }else if(gameType == TICTAC){
+        std::cout << "BEM VINDOS AO TICTACTOE!!" << std::endl;
+        Board board; 
+        TicTacToe game(board);
+        game.Start(nickname1, nickname2);
     }
+    
 }
 
 
@@ -148,9 +174,12 @@ int main() {
             GameType gameType = NONE;
             if (gameTypeChar == 'R') {
                 gameType = REVERSI;
-            } else if (gameTypeChar == 'C') {
+            } else if(gameTypeChar == 'C') {
                 gameType = CONNECT4;
-            } else {
+            } else if(gameTypeChar == 'T'){
+                gameType = TICTAC;
+            } 
+            else {
                 std::cout << "ERRO: dados incorretos" << std::endl;
                 continue;
             }

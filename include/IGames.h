@@ -5,9 +5,6 @@
 #include <vector>
 
 class AbstractGames {
-protected:
-   void printBasicBoard() const;
-
 public:
     std::vector<std::vector<int>> board; // Representando o tabuleiro
     AbstractGames(int rows, int cols);          //Construtor
