@@ -106,7 +106,7 @@ void PlayerManager::readFileRowsAndRemovePlayer(std::vector<Player> &players,
     Player *auxPlayer = nullptr;
     checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
 
-    if (auxPlayer->getNickname() == nickname) {
+    if (auxPlayer->getNickname() == toLower(nickname)) {
       playerFound = true;
     } else {
       players.push_back(*auxPlayer);
@@ -149,7 +149,7 @@ void PlayerManager::checkNewNickname(Player *auxPlayer, Player &player,
                                      std::string nickname) const {
 
   if (auxPlayer->getNickname() == player.getNickname() &&
-      nickname != player.getNickname()) {
+      toLower(nickname) != player.getNickname()) {
     delete auxPlayer;
     throw std::invalid_argument(
         "Jogador já existe. Tente novamente com outro nickname.");
@@ -176,7 +176,7 @@ void PlayerManager::readFileRowsAndUpdatePlayer(std::vector<Player> &players,
     checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
     checkNewNickname(auxPlayer, player, nickname);
 
-    if (auxPlayer->getNickname() == nickname) {
+    if (auxPlayer->getNickname() == toLower(nickname)) {
       *auxPlayer = player;
       playerFound = true;
     }
@@ -232,7 +232,7 @@ Player PlayerManager::returnPlayerByNickname(std::string nickname) {
       Player *auxPlayer = nullptr;
       checkSizeOfPlayerDataVectorAndCreateAuxPlayer(playerData, auxPlayer);
 
-      if (auxPlayer->getNickname() == nickname) {
+      if (auxPlayer->getNickname() == toLower(nickname)) {
         return *auxPlayer;
       }
 
